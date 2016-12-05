@@ -1,3 +1,5 @@
+/* global videojs */
+
 'use strict';
 
 var baseVideoJsComponent = videojs.getComponent('Component');

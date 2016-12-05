@@ -1,7 +1,7 @@
 var dom = require('./miniDom');
 var adsSetupPlugin = require('./ads-setup-plugin');
 var messages = require('./messages');
-
+ 
 videojs.plugin('ads-setup', adsSetupPlugin);
 
 dom.onReady(function() {
@@ -86,7 +86,8 @@ dom.onReady(function() {
           "plugins": {
             "ads-setup":{
               "adCancelTimeout":20000,// Wait for ten seconds before canceling the ad.
-              "adsEnabled": true
+              "adsEnabled": true,
+              "adPostTagUrl":'http://videoads.ambebi.ge/www/delivery/fc.php?script=apVideo:vast2&zoneid=24&mp4=1'
             }
           }
         };
