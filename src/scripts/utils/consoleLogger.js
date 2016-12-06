@@ -1,7 +1,7 @@
 /*jshint unused:false */
 "use strict";
 
-var _verbosity = 0;
+var _verbosity = 5;
 var _prefix = "[videojs-vast-vpaid] ";
 
 function setVerbosity (v)

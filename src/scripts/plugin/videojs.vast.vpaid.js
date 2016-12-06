@@ -15,12 +15,13 @@ var utilities = require('../utils/utilityFunctions');
 var logger = require('../utils/consoleLogger');
 
 module.exports = function VASTPlugin(options) {
-    
-    
+
+
     var snapshot;
+    var postsnapshot;
     var player = this;
-    
- var   vastClientOption = options.adCancelTimeout?{skipOffset:options.adCancelTimeout}:{};
+
+    var vastClientOption = options.adCancelTimeout ? {skipOffset: options.adCancelTimeout} : {};
     var vast = new VASTClient(vastClientOption);
     var adsCanceled = false;
     var postrollRuning = false;
@@ -98,8 +99,7 @@ module.exports = function VASTPlugin(options) {
 
 
 
-
-    logger.setVerbosity(settings.verbosity);
+    logger.setVerbosity(0);
 
     vastUtil.runFlashSupportCheck(settings.vpaidFlashLoaderPath);// Necessary step for VPAIDFLASHClient to work.
 
@@ -124,7 +124,7 @@ module.exports = function VASTPlugin(options) {
         cancelAds();
     });
 
-    player.on('ended', tryToPlayPostrollAd);
+    player.on('vast.contentEnd', tryToPlayPostrollAd);
 
 
     player.vast = {
@@ -143,31 +143,30 @@ module.exports = function VASTPlugin(options) {
 
     /**** Local functions ****/
     function tryToPlayPrerollAd() {
+
         //We remove the poster to prevent flickering whenever the content starts playing
-        console.log(playerUtils.isPlayedPreRol())
 
         playerUtils.removeNativePoster(player);
 
+
+//mixas check preroll once
         if (playPreRollOnce)
         {
             return;
         } else {
             playPreRollOnce = true;
         }
-        console.log('start preroll');
         playerUtils.once(player, ['vast.adsCancel', 'vast.adEnd'], function () {
             removeAdUnit();
             restoreVideoContent();
         });
-
-        player.trigger('vast.blockPostRoll');
+        player.trigger('vast.blockPostRoll'); // MIXAS blocking postroll
         async.waterfall([
             checkAdsEnabled,
             preparePlayerForAd,
             startAdCancelTimeout,
             playPrerollAd
         ], function (error, response) {
-            console.log('endWaterfall');
             if (error) {
                 trackAdError(error, response);
             } else {
@@ -187,8 +186,8 @@ module.exports = function VASTPlugin(options) {
 
             setupContentEvents();
             if (snapshot) {
-                playerUtils.restorePlayerSnapshot(player, snapshot);
-                snapshot = null;
+               playerUtils.restorePlayerSnapshot(player, snapshot);
+                //snapshot = null;
             }
         }
 
@@ -218,7 +217,10 @@ module.exports = function VASTPlugin(options) {
 
         function preparePlayerForAd(next) {
             if (canPlayPrerollAd()) {
+
                 snapshot = playerUtils.getPlayerSnapshot(player);
+                postsnapshot = playerUtils.getPlayerSnapshot(player);
+               
                 player.pause();
                 addSpinnerIcon();
 
@@ -276,34 +278,16 @@ module.exports = function VASTPlugin(options) {
     }
     function tryToPlayPostrollAd() {
 
-
-
-
-        console.log(playerUtils.canplayPostRoll())
-        if (!playerUtils.canplayPostRoll())
-        {
-            player.trigger('vast.unblockPostRoll');
-            postrollRuning = true;
-            return;
-        }
-
-        if (!playPostRollOnce)
-        {
-            playPostRollOnce = true;
-        } else {
-            return
-        }
-
-
         // player.trigger('vast.blockPostRoll');
 
         //We remove the poster to prevent flickering whenever the content starts playing
         playerUtils.removeNativePoster(player);
 
-        playerUtils.once(player, ['vast.adsCancel', 'vast.adEnd'], function () {
-            removeAdUnit();
-            restoreVideoContent();
-        });
+//        playerUtils.once(player, ['vast.adsCancel', 'vast.adEnd'], function () {
+//            console.log('removing once');
+//            removeAdUnit();
+//            restoreVideoContent();
+//        });
 
         //  player.trigger('vast.blockPostRoll');
 
@@ -311,33 +295,29 @@ module.exports = function VASTPlugin(options) {
             checkAdsEnabled,
             preparePlayerForAd,
             startAdCancelTimeout,
-            playPostrollAd,
-            resetPreroll //mixas functionality to reset to the start after postrol
+            playPostrollAd
         ], function (error, response) {
-            console.log('endWaterfall');
             if (error) {
                 trackAdError(error, response);
             } else {
-                player.trigger('vast.adPostEnd');
+                player.trigger('vast.adEnd');
             }
         });
 
-        playerUtils.once(player, [ 'vast.adPostEnd'], function () {
+        playerUtils.once(player, ['vast.adEnd'], function () {
+
+            // player.trigger('vast.adSkip');
             removeAdUnit();
-            
-            console.log('removing and restore');
-            
+            restoreVideoContent();
+
         });
         /*** Local functions ***/
         function resetPreroll()
         {
             //mixas trying to reset player to start
-
             playPreRollOnce = true;
             player.trigger('vast.blockPostRoll');
-            console.log('blocking postrol');
-            player.trigger('vast.adPostEnd');
-           // player.trigger('vast.unblockPostRoll');
+         
         }
 
         function removeAdUnit() {
@@ -349,8 +329,11 @@ module.exports = function VASTPlugin(options) {
         function restoreVideoContent() {
 
             setupContentEvents();
-            if (snapshot) {
-                playerUtils.restorePlayerSnapshot(player, snapshot);
+            
+            if (postsnapshot) {
+                postsnapshot.playing = false;
+                playerUtils.restorePlayerSnapshot(player, postsnapshot);
+                player.pause(true);
                 snapshot = null;
             }
         }
@@ -380,7 +363,7 @@ module.exports = function VASTPlugin(options) {
 
         function preparePlayerForAd(next) {
             if (canPlayPrerollAd()) {
-                snapshot = playerUtils.getPlayerSnapshot(player);
+                //    snapshot = playerUtils.getPlayerSnapshot(player);
                 player.pause();
                 addSpinnerIcon();
 
@@ -450,7 +433,7 @@ module.exports = function VASTPlugin(options) {
     }
     function playPostrollAd(callback) {
 
-        console.log(settings);
+        
         async.waterfall([
             getVastPostResponse,
             playAd
@@ -467,6 +450,7 @@ module.exports = function VASTPlugin(options) {
     function playAd(vastResponse, callback) {
         //TODO: Find a better way to stop the play. The 'playPrerollWaterfall' ends in an inconsistent situation
         //If the state is not 'preroll?' it means the ads were canceled therefore, we break the waterfall
+
         if (adsCanceled) {
             return;
         }

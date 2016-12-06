@@ -83,6 +83,7 @@ dom.onReady(function() {
       createVideoEl(videoContainer, function(videoEl) {
         var mode = activeMode();
         var adPluginOpts = {
+            'mute':true, 
           "plugins": {
             "ads-setup":{
               "adCancelTimeout":20000,// Wait for ten seconds before canceling the ad.

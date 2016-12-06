@@ -34,7 +34,6 @@ function VASTIntegrator(player) {
 
 VASTIntegrator.prototype.playAd = function playAd(vastResponse, callback) {
     var that = this;
-    console.log(that.player.options_.plugins['ads-setup']);
     callback = callback || utilities.noop;
 
     if (!(vastResponse instanceof VASTResponse)) {
@@ -232,15 +231,13 @@ VASTIntegrator.prototype._addSkipButton = function addSkipButton(source, tracker
     function updateSkipButtonState(skipButton, skipOffset, player) {
         var timeLeft = Math.ceil(skipOffset - player.currentTime());
         if (timeLeft > 0) {
-            var text = player.options_.plugins['ads-setup'].skipInButtonText? player.options_.plugins['ads-setup'].skipInButtonText:"Skip in "
+            var text = player.options_.plugins['ads-setup'].skipInButtonText ? player.options_.plugins['ads-setup'].skipInButtonText : "Skip in "
             skipButton.innerHTML = text + utilities.toFixedDigits(timeLeft, 2) + "...";
         } else {
             if (!dom.hasClass(skipButton, 'enabled')) {
-                
-               // console.log(player); 
+
                 dom.addClass(skipButton, 'enabled');
-               // skipButton.innerHTML ="Skip ad";
-                skipButton.innerHTML =player.options_.plugins['ads-setup'].skipButtonText? player.options_.plugins['ads-setup'].skipButtonText:"Skip ad";
+                skipButton.innerHTML = player.options_.plugins['ads-setup'].skipButtonText ? player.options_.plugins['ads-setup'].skipButtonText : "Skip ad";
             }
         }
     }

@@ -226,12 +226,10 @@ playerUtils.prepareForAds = function (player) {
 
 
     player.on('vast.blockPostRoll', function () {
-        console.log(_canPayPostRoll + ' turning to false');
         _firstPlay = false;
         _canPayPostRoll = false;
     });
     player.on('vast.unblockPostRoll', function () {
-        console.log(_canPayPostRoll + ' turning to true');
 
         _canPayPostRoll = true;
     });
@@ -249,7 +247,6 @@ playerUtils.prepareForAds = function (player) {
         {
             _firstPlay = true;
             player.trigger('vast.firstPlay');
-            console.log('video ended');
         }
 
     }
@@ -398,7 +395,7 @@ playerUtils.prepareForAds = function (player) {
     }
 
     function removeStyles() {
-        console.log('add ended');
+      
         dom.removeClass(player.el(), 'vjs-ad-playing');
     }
 };
