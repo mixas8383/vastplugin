@@ -333,7 +333,7 @@ playerUtils.prepareForAds = function (player) {
             return origPaused.apply(this, arguments);
         };
     }
-
+ 
     function isAdPlaying() {
         return player.vast && player.vast.adUnit;
     }

@@ -26,9 +26,9 @@ var config       = require('./config');
 
 var devPath      = path.join(config.DEV, '/');
 var distPath     = path.join(config.DIST, '/');
-var isProduction = config.env === 'production';
+var isProduction =false;// config.env === 'production';
 
-
+//console.log(isProduction)
 gulp.task('build', function (done) {
   runSequence(
     'clean',
@@ -71,13 +71,15 @@ gulp.task('lintjs', function() {
 
 
 function buildProdJs() {
+    console.log('BUILD production'.green);
+    console.log(distPath.green);
   var cloneSink = clone.sink();
 
   var process = lazypipe()
     .pipe(buffer)
     .pipe(function() {return cloneSink;})
     .pipe(sourcemaps.init, {loadMaps: true})
-    .pipe(uglify, {compress: false}) // compress needs to be false otherwise it mess the sourcemaps
+    .pipe(uglify, {compress: true}) // compress needs to be false otherwise it mess the sourcemaps
     .pipe(rename, {suffix: '.min'})
     .pipe(sourcemaps.write, './')
     .pipe(cloneSink.tap)

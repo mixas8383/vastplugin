@@ -5,7 +5,7 @@ var parseArgs = require('minimist');
 
 var knownOptions = {
   string: 'env',
-  default: {env: process.env.NODE_ENV || 'development'}
+  default: 'production'//{env: process.env.NODE_ENV || 'development'}
 };
 var options = parseArgs(process.argv.slice(2), knownOptions);
 

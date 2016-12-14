@@ -230,6 +230,7 @@ VASTIntegrator.prototype._addSkipButton = function addSkipButton(source, tracker
 
     function updateSkipButtonState(skipButton, skipOffset, player) {
         var timeLeft = Math.ceil(skipOffset - player.currentTime());
+        console.log(player.options_)
         if (timeLeft > 0) {
             var text = player.options_.plugins['ads-setup'].skipInButtonText ? player.options_.plugins['ads-setup'].skipInButtonText : "Skip in "
             skipButton.innerHTML = text + utilities.toFixedDigits(timeLeft, 2) + "...";

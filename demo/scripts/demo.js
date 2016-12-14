@@ -80,10 +80,11 @@ dom.onReady(function() {
     }
 
     function updateDemo() {
+        
       createVideoEl(videoContainer, function(videoEl) {
         var mode = activeMode();
         var adPluginOpts = {
-            'mute':true, 
+            'mute':true,  
           "plugins": {
             "ads-setup":{
               "adCancelTimeout":20000,// Wait for ten seconds before canceling the ad.
@@ -105,7 +106,7 @@ dom.onReady(function() {
             }, 0);
           };
         }
-
+console.log(adPluginOpts)
         player = videojs(videoEl, adPluginOpts);
 
         //We hide the pause and resume btns every time we update

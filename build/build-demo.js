@@ -61,7 +61,7 @@ gulp.task('build-demo-page', function () {
 
 
 gulp.task('build-demo-scripts', function () {
-  var mainScript = path.join('demo/scripts', 'demo.js');
+  var mainScript = path.join('demo/scripts', 'demo_1.js');
   var destPath = path.join(config.DEV, '/demo/scripts');
 
   return browserify({

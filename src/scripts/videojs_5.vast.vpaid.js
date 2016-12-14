@@ -1,5 +1,5 @@
 /* global videojs */
-
+console.log('dsdsdsdsdsdsd');
 'use strict';
 console.log('rnew');
 require('./plugin/components/ads-label_5');
