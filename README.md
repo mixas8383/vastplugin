@@ -3,6 +3,32 @@
 [![Code Climate](https://codeclimate.com/github/MailOnline/videojs-vast-vpaid/badges/gpa.svg)](https://codeclimate.com/github/MailOnline/videojs-vast-vpaid)
 [![Test Coverage](https://codeclimate.com/github/MailOnline/videojs-vast-vpaid/badges/coverage.svg)](https://codeclimate.com/github/MailOnline/videojs-vast-vpaid/coverage)
 
+DEMO SETTINGS in working directory
+{
+    "width": "792",
+    "height": "430",
+    "poster": "LINK_TO_POSTER",
+    "preload": "auto",
+    "autoplay": true,
+    "controls": true,
+    "loop": false,
+    "controlbar": true,
+    "plugins": {
+        "ads-setup": {
+            "adCancelTimeout": 3000, // skip timeout
+            "adsCancelTimeout": 50000,// add weiting timeout
+            "adsEnabled": true,
+            "advertismentLabel": "Advertisment", // Advertisment text
+            "skipButtonText": "Skip ", // skip button text after skip enabled
+            "skipInButtonText": "Skip in ", //skip button text before skip enabled
+            "adTagUrl": "LINK_TO_PREROLL_ADD",
+            "adPostTagUrl": "LINK_TO_POSTROLL_ADD"
+        }
+    }
+}
+
+
+
 This plugin allows videojs to monetise its videos. To do so, it implements the [VAST](http://www.iab.net/media/file/VASTv3.0.pdf) and [VPAID](http://www.iab.net/media/file/VPAID_2.0_Final_04-10-2012.pdf) specifications from IAB.
 
 Currently we support VAST and VPAID [Flash](https://github.com/MailOnline/VPAIDFLASHClient) and [HTML5](https://github.com/MailOnline/VPAIDHTML5Client) preroll ads, we will add more VAST ad types as we need them.
