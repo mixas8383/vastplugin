@@ -4,6 +4,7 @@
 [![Test Coverage](https://codeclimate.com/github/MailOnline/videojs-vast-vpaid/badges/coverage.svg)](https://codeclimate.com/github/MailOnline/videojs-vast-vpaid/coverage)
 
 DEMO SETTINGS in working directory
+```javascript
 {
     "width": "792",
     "height": "430",
@@ -27,7 +28,7 @@ DEMO SETTINGS in working directory
     }
 }
 
-
+```
 
 This plugin allows videojs to monetise its videos. To do so, it implements the [VAST](http://www.iab.net/media/file/VASTv3.0.pdf) and [VPAID](http://www.iab.net/media/file/VPAID_2.0_Final_04-10-2012.pdf) specifications from IAB.
 
